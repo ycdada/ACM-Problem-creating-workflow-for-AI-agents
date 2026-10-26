@@ -18,7 +18,7 @@ codex login status
 
 3. 按 [README 快速开始](../README.md#快速开始)克隆本仓库，在项目目录中打开 Codex。CLI 运行 `codex`；桌面版选择该目录作为项目。
 
-Codex 从项目的 `.agents/skills/` 发现仓库级 Skill。可以在聊天中输入 `$acm-authoring` 或 `$acm-independent-review`；CLI / IDE 也可使用 `/skills` 查看。安装后没有出现时，确认当前项目目录，再重启 Codex。[官方 Skill 发现与调用说明](https://learn.chatgpt.com/docs/build-skills)
+Codex 从项目的 `.agents/skills/` 发现仓库级 Skill。可以在聊天中输入 `$acm-authoring`、`$acm-reconstruct` 或 `$acm-independent-review`；CLI / IDE 也可使用 `/skills` 查看。安装后没有出现时，确认当前项目目录，再重启 Codex。[官方 Skill 发现与调用说明](https://learn.chatgpt.com/docs/build-skills)
 
 ## 安装到自己的项目
 
@@ -30,7 +30,7 @@ Codex 从项目的 `.agents/skills/` 发现仓库级 Skill。可以在聊天中�
 $skillSource = (Resolve-Path '.agents/skills').Path
 $contestRoot = 'D:\contests\my-contest'
 New-Item -ItemType Directory -Force -Path "$contestRoot\.agents\skills" | Out-Null
-Copy-Item -LiteralPath "$skillSource\acm-authoring", "$skillSource\acm-independent-review" -Destination "$contestRoot\.agents\skills" -Recurse
+Copy-Item -LiteralPath "$skillSource\acm-authoring", "$skillSource\acm-reconstruct", "$skillSource\acm-independent-review" -Destination "$contestRoot\.agents\skills" -Recurse
 Set-Location -LiteralPath $contestRoot
 ```
 
@@ -40,11 +40,11 @@ Set-Location -LiteralPath $contestRoot
 skill_source="$PWD/.agents/skills"
 contest_root="$HOME/contests/my-contest"
 mkdir -p "$contest_root/.agents/skills"
-cp -R "$skill_source/acm-authoring" "$skill_source/acm-independent-review" "$contest_root/.agents/skills/"
+cp -R "$skill_source/acm-authoring" "$skill_source/acm-reconstruct" "$skill_source/acm-independent-review" "$contest_root/.agents/skills/"
 cd "$contest_root"
 ```
 
-在目标目录打开 Codex，或在该终端运行 `codex`。两个 Skill 应为同级目录，且每个目录直接包含 `SKILL.md`，避免多复制一层外部文件夹。
+在目标目录打开 Codex，或在该终端运行 `codex`。三个 Skill 应为同级目录，且每个目录直接包含 `SKILL.md`，避免多复制一层外部文件夹。
 
 如果希望跨项目使用，可采用 README 中的 Skill 安装器请求。用户级安装和项目级安装选择一种即可；重复安装同名 Skill 可能产生多个候选项。
 
@@ -62,6 +62,14 @@ cd "$contest_root"
 使用 $acm-authoring，继续 problems/example/。
 读取已有设计和报告，使用当前项目的编译工具与固定 testlib，
 补齐 validator、标程、暴力和数据计划，先完成本地小规模自测。
+```
+
+已有原题时可以直接请求还原与补数据：
+
+```text
+使用 $acm-reconstruct，根据我提供的原题题面，在 problems/original-example/ 中建立题包。
+保留原题明确的语义和约束，用 testlib 编写 validator 与 generator，
+制作新的测试数据并核对答案，报告材料来源和未确定的内容。
 ```
 
 独立验题使用新的干净上下文，只给题面、样例、限制和公开附件。示例：
@@ -161,18 +169,18 @@ python3 -m venv .venv
 
 ## 更新
 
-- **直接克隆 `main` 使用**：保存本地改动后，在源仓库运行 `git pull --ff-only`，再更新目标项目中使用的两个 Skill 目录。
-- **复制安装**：更新源仓库后比较同名目录的差异，保留自己修改的内容；两个 Skill 一起更新。
+- **直接克隆 `main` 使用**：保存本地改动后，在源仓库运行 `git pull --ff-only`，再更新目标项目中使用的三个 Skill 目录。
+- **复制安装**：更新源仓库后比较同名目录的差异，保留自己修改的内容；三个 Skill 一起更新。
 - **使用 Skill 安装器**：指定希望安装的版本；已有同名目录时，先确认更新方式和本地修改。
 - **固定标签安装**：标签工作区通常处于 detached HEAD。通过 `git fetch --tags` 获取后续版本，再选择目标标签；需要在其中开发题目时先创建工作分支。
 
-首版标签为 `v0.1.0`。后续发布版本见 [GitHub Releases](https://github.com/ycdada/ACM-Problem-creating-workflow-for-AI-agents/releases)。
+首版标签 `v0.1.0` 包含主流程和独立验题两个 Skill；新增的原题还原 Skill 需使用 `main` 或包含它的后续版本。发布版本见 [GitHub Releases](https://github.com/ycdada/ACM-Problem-creating-workflow-for-AI-agents/releases)。
 
 ## 常见问题
 
 | 现象 | 检查方式 |
 | --- | --- |
-| 找不到 Skill | 确认打开了目标项目；检查 `.agents/skills/<名称>/SKILL.md`，两个目录同级；仍未出现时重启 Codex |
+| 找不到 Skill | 确认打开了目标项目；检查 `.agents/skills/<名称>/SKILL.md`，三个目录同级；仍未出现时重启 Codex |
 | `$acm-authoring` 被 shell 当成变量 | 将整段调用请求发给 Codex 聊天，而不是在 PowerShell / Bash 直接执行 |
 | Skill 列表出现重复项 | 检查是否同时进行了用户级和项目级安装 |
 | 编译找不到 `testlib.h` | 核对固定文件位置、`-I` 搜索目录和命令的实际工作目录 |

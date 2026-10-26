@@ -1,6 +1,6 @@
 # ACM Problem Creating Workflow
 
-面向 ACM/ICPC 算法竞赛，尤其是 Codeforces Polygon 的 AI 辅助出题 Skills。通过主流程与独立验题两个入口，将数学定义、解法、testlib 程序、数据自测和 TeX 题面组织成有验证依据的工作流。
+面向 ACM/ICPC 算法竞赛，尤其是 Codeforces Polygon 的 AI 辅助出题 Skills。通过新题主流程、原题还原与独立验题三个入口，将数学定义、解法、testlib 程序、数据自测和 TeX 题面组织成有验证依据的工作流。
 
 ## 快速开始
 
@@ -38,9 +38,10 @@ codex
 | Skill | 适用场景 | 主要产出 |
 | --- | --- | --- |
 | [acm-authoring](.agents/skills/acm-authoring/SKILL.md) | 从 idea 出发，或继续完善已有题目 | 数学定义与证明、各类程序、数据计划、自测记录、TeX 题面题解、Polygon 验题报告 |
+| [acm-reconstruct](.agents/skills/acm-reconstruct/SKILL.md) | 根据已有原题题面还原题目、导入题库或补数据 | 来源与规格、解法与答案依据、testlib 程序、新数据集和还原报告 |
 | [acm-independent-review](.agents/skills/acm-independent-review/SKILL.md) | 根据选手可见题面独立解题验题 | 独立解与自测、首次结论冻结、歧义和反例、按请求进行的交叉核验 |
 
-主流程按本次任务选择阶段，支持只讨论设计、只修复 validator 或只完善题面。两个 Skill 均以中文组织计划和报告。
+主流程按本次任务选择阶段，支持只讨论设计、只修复 validator 或只完善题面。三个 Skill 均以中文组织计划和报告。
 
 ```mermaid
 flowchart LR
@@ -56,14 +57,15 @@ flowchart LR
 
 ### 在本仓库中使用
 
-按上面的快速开始克隆并打开项目即可。两个 Skill 位于仓库级 `.agents/skills/`，可以直接按名称调用。需要固定首版时，在克隆命令中加入 `--branch v0.1.0`；固定标签的更新方式见[详细指南](docs/getting-started.md#更新)。[Codex Skill 文档](https://developers.openai.com/codex/skills/)
+按上面的快速开始克隆并打开项目即可。三个 Skill 位于仓库级 `.agents/skills/`，可以直接按名称调用。`v0.1.0` 首版只包含主流程和独立验题；使用原题还原 Skill 请安装 `main` 或包含该 Skill 的后续版本。固定标签的更新方式见[详细指南](docs/getting-started.md#更新)。[Codex Skill 文档](https://developers.openai.com/codex/skills/)
 
 ### 在自己的题目项目中使用
 
-将下列两个目录一起复制到目标题目仓库的 `.agents/skills/` 下，保持它们互为同级目录：
+将下列三个目录一起复制到目标题目仓库的 `.agents/skills/` 下，保持它们互为同级目录：
 
 ```text
 .agents/skills/acm-authoring/
+.agents/skills/acm-reconstruct/
 .agents/skills/acm-independent-review/
 ```
 
@@ -72,11 +74,11 @@ flowchart LR
 ```text
 请使用 skill-installer，从 GitHub 仓库
 ycdada/ACM-Problem-creating-workflow-for-AI-agents
-安装 .agents/skills/acm-authoring 和 .agents/skills/acm-independent-review，
-使用 v0.1.0 版本。
+安装 .agents/skills/acm-authoring、.agents/skills/acm-reconstruct
+和 .agents/skills/acm-independent-review，使用 main 分支。
 ```
 
-两个目录同时安装后，主流程中的独立验题引用才能保持完整。其他支持 Agent Skills 的客户端可按其导入方式使用；当前已验证的入口与界面元数据面向 Codex。
+三个目录同时安装后，原题还原对通用测试规范的引用，以及不同流程间的移交引用才能保持完整。其他支持 Agent Skills 的客户端可按其导入方式使用；当前已验证的入口与界面元数据面向 Codex。
 
 ## 使用
 
@@ -96,6 +98,16 @@ ycdada/ACM-Problem-creating-workflow-for-AI-agents
 ```
 
 可以进一步指定 TeX 题面、翻译、样例解释、题解或 Polygon 同步等范围。Skill 会读取相应阶段的参考文件，沿用项目已有工具与目录约定。
+
+### 根据已有原题还原并造数据
+
+```text
+使用 $acm-reconstruct，根据我提供的原题题面，在 problems/original-example/ 中还原题目。
+先核对输入输出契约和约束，再实现标程、独立核对与 testlib 程序，
+制作可复现的新数据集；记录原题来源、验证依据和待确认项。
+```
+
+可以提供文本、截图、PDF 或链接。缺失的约束和无法辨认的公式会明确记录；自行制作的数据与原题提供的数据分开标明来源。
 
 ### 独立验题
 
@@ -171,6 +183,10 @@ Skill 承载工作方式，执行工具落实检查条件。每个结论绑定�
     SKILL.md
     agents/openai.yaml
     references/review-report.md
+  acm-reconstruct/
+    SKILL.md
+    agents/openai.yaml
+    references/reconstruction-report.md
 docs/
   getting-started.md
   workflow-proposal.md
@@ -185,6 +201,7 @@ docs/
 
 - 设计任务识别出未确定的边界语义，保留问题供出题人决定。
 - 独立验题任务完成 C++17 编译、自测与首次结果冻结。
+- 原题还原任务完成 testlib 程序编译、8 份数据的校验与重生成核对，以及独立答案和错误解检查。
 - API 示例完成语法、签名、文件内容编码与模拟响应检查。
 
 具体题目的正确性、数据覆盖和时限仍需在实际使用时验证。当前没有独立的 CLI 或 MCP server 实现。

@@ -1,6 +1,6 @@
 # 面向 ACM / Codeforces Polygon 的 AI 辅助出题工作流
 
-调研日期：2026-10-26。主流程与独立验题 Skill 已在仓库落地；执行工具、题目模板与 MCP 封装仍为设计建议。
+调研日期：2026-10-26。主流程、原题还原与独立验题 Skill 已在仓库落地；执行工具、题目模板与 MCP 封装仍为设计建议。
 
 推荐采用 **Git 管理题目源文件 + 本地可重复执行的验证工具 + 阶段式 Skill + Polygon 官方 API**。先用一道完整题验证 rbx 能否承担执行工作，MCP 放在需要统一工具入口时加入。
 
@@ -165,9 +165,10 @@ Kattis problemtools 可以作为其他平台适配的参考，但它主要面向
 
 ## 6. Skill 的最小组织方式
 
-已提供 **一个主流程 Skill，加一个独立验题 Skill**。阶段细节放在引用文档中，按需要读取。
+已提供 **主流程、原题还原与独立验题三个 Skill**。原题还原复用主流程的测试与平台规范；阶段细节放在引用文档中，按需要读取。
 
 - [acm-authoring](../.agents/skills/acm-authoring/SKILL.md)：输入 `$acm-authoring`，指定题目目录与本次出题目标。
+- [acm-reconstruct](../.agents/skills/acm-reconstruct/SKILL.md)：输入 `$acm-reconstruct`，提供已有原题题面，按确认的规格重建题包并制作新数据。
 - [acm-independent-review](../.agents/skills/acm-independent-review/SKILL.md)：在干净上下文中输入 `$acm-independent-review`，提供选手可见材料。
 
 ```text
@@ -186,6 +187,11 @@ Kattis problemtools 可以作为其他平台适配的参考，但它主要面向
     agents/openai.yaml
     references/
       review-report.md
+  acm-reconstruct/
+    SKILL.md
+    agents/openai.yaml
+    references/
+      reconstruction-report.md
 ```
 
 这是当前 Skill 目录；`.agents/skills` 是 Codex 支持的仓库级 Skill 位置。Skill 可以包含引用、模板和脚本，并按需加载详细指令。[官方 Skill 文档](https://developers.openai.com/codex/skills/)

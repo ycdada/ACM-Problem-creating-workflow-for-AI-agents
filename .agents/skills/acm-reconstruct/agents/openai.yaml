@@ -1,0 +1,4 @@
+interface:
+  display_name: "ACM 原题还原与造数据"
+  short_description: "根据已有原题题面还原规格和解法，使用 testlib 制作并验证新测试数据"
+  default_prompt: "使用 $acm-reconstruct，根据我提供的原题题面还原输入输出契约与解法，制作可复现数据并记录来源、验证依据和待确认项。"

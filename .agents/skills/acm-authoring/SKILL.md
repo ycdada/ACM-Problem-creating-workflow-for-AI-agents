@@ -1,11 +1,13 @@
 ---
 name: acm-authoring
-description: 为 ACM/ICPC 与 Codeforces Polygon 创建或完善算法竞赛题，推进数学定义、解法、testlib 程序、数据验题及 TeX 题面题解。用于出题、补齐题包或继续已有出题工作；仅按题面独立解题验题时使用 acm-independent-review。
+description: 为 ACM/ICPC 与 Codeforces Polygon 创建或完善算法竞赛题，推进数学定义、解法、testlib 程序、数据验题及 TeX 题面题解。用于新题设计与题包维护；根据已有原题还原并造数据使用 acm-reconstruct，独立盲测使用 acm-independent-review。
 ---
 
 # ACM 出题主流程
 
 把用户指定范围的出题工作落实为可维护的源文件和有依据的检查报告。所有说明、计划与报告使用中文；程序标识符和平台字段按现有约定使用。
+
+根据已有原题题面重建题目或制作数据时，使用 [acm-reconstruct](../acm-reconstruct/SKILL.md) 先确认原题来源和输入输出契约；后续局部维护可继续使用本流程。
 
 ## 确定本次范围
 
