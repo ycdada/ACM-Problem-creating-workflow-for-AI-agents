@@ -1,0 +1,4 @@
+interface:
+  display_name: "ACM 出题主流程"
+  short_description: "推进算法竞赛题的数学定义、testlib 程序、测试数据与 Polygon 验题"
+  default_prompt: "使用 $acm-authoring，检查当前题目的已有材料，按本次目标补齐实现与验证，并保存有依据的出题报告。"

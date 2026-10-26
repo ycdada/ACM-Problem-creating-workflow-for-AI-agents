@@ -1,0 +1,4 @@
+interface:
+  display_name: "ACM 独立验题"
+  short_description: "基于选手可见题面独立解题、自测并冻结结果，记录盲测与交叉核验结论"
+  default_prompt: "使用 $acm-independent-review，仅依据指定的选手可见材料独立解题验题，冻结首次结果后按请求交叉核验并保存报告。"
