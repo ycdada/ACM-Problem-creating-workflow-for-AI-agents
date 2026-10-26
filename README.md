@@ -2,6 +2,37 @@
 
 面向 ACM/ICPC 算法竞赛，尤其是 Codeforces Polygon 的 AI 辅助出题 Skills。通过主流程与独立验题两个入口，将数学定义、解法、testlib 程序、数据自测和 TeX 题面组织成有验证依据的工作流。
 
+## 快速开始
+
+先准备 Git 和可用的 Codex。只讨论 idea、数学定义和解法时，可以先完成下面三步；编译器、testlib、TeX 和 Polygon 凭据在需要执行相应阶段时配置。
+
+**1. 克隆仓库。** 以下命令适用于 PowerShell 和 Bash，默认取得 `main` 的最新文档与 Skills：
+
+```bash
+git clone --depth 1 https://github.com/ycdada/ACM-Problem-creating-workflow-for-AI-agents.git
+cd ACM-Problem-creating-workflow-for-AI-agents
+```
+
+**2. 在该目录打开 Codex。** 桌面版打开此项目；CLI 用户在该目录运行：
+
+```bash
+codex
+```
+
+尚未安装或登录时，按[安装与配置指南](docs/getting-started.md#准备-codex)操作。
+
+**3. 将下面的请求发给 Codex。** `$acm-authoring` 是 Skill 调用名称，整段请求应在 Codex 聊天中输入：
+
+```text
+使用 $acm-authoring，在 problems/example/ 中整理一道候选题：
+给定整数数组，求一个非空连续子数组的最大元素和。
+本次只完成数学定义、解法与证明、约束建议和待决问题，暂不连接 Polygon。
+```
+
+预期产出是指定目录下的设计材料与任务报告；文件命名沿用 Skill 和项目约定。需要验题时，在新的干净上下文中调用 `$acm-independent-review` 并提供选手可见材料。
+
+其他入口：[复制到自己的项目](docs/getting-started.md#安装到自己的项目)、[配置 testlib](docs/getting-started.md#配置-testlib)、[配置 Polygon](docs/getting-started.md#配置-polygon)、[常见问题](docs/getting-started.md#常见问题)。
+
 ## 你会得到什么
 
 | Skill | 适用场景 | 主要产出 |
@@ -25,12 +56,7 @@ flowchart LR
 
 ### 在本仓库中使用
 
-```bash
-git clone --depth 1 --branch v0.1.0 https://github.com/ycdada/ACM-Problem-creating-workflow-for-AI-agents.git
-cd ACM-Problem-creating-workflow-for-AI-agents
-```
-
-在该目录中打开 Codex。两个 Skill 位于仓库级 `.agents/skills/`，可以直接按名称调用。[Codex Skill 文档](https://developers.openai.com/codex/skills/)
+按上面的快速开始克隆并打开项目即可。两个 Skill 位于仓库级 `.agents/skills/`，可以直接按名称调用。需要固定首版时，在克隆命令中加入 `--branch v0.1.0`；固定标签的更新方式见[详细指南](docs/getting-started.md#更新)。[Codex Skill 文档](https://developers.openai.com/codex/skills/)
 
 ### 在自己的题目项目中使用
 
@@ -41,7 +67,7 @@ cd ACM-Problem-creating-workflow-for-AI-agents
 .agents/skills/acm-independent-review/
 ```
 
-也可以在 Codex 中使用内置 Skill 安装器：
+可直接使用[Windows PowerShell 或 Bash 安装命令](docs/getting-started.md#安装到自己的项目)。也可以在 Codex 中使用内置 Skill 安装器，安装到该安装器管理的用户级位置：
 
 ```text
 请使用 skill-installer，从 GitHub 仓库
@@ -95,6 +121,18 @@ ycdada/ACM-Problem-creating-workflow-for-AI-agents
 
 缺少工具、正式数据或平台连接的检查会如实标记为未执行。局部自测、证明判断与目标平台实测分别记录。
 
+按阶段准备环境：
+
+| 需要做什么 | 需要准备 |
+| --- | --- |
+| 设计题目、审阅文本 | Codex；通过 Git 克隆时需要 Git |
+| 编译和自测 | 题目使用的编译器、项目 runner、固定版本的 `testlib.h` |
+| 运行 Python API 示例 | Python 3 和 `requests`，建议使用项目虚拟环境 |
+| 本地查看 TeX | 项目选用的 TeX 工具；平台渲染可走 Polygon 接口 |
+| Polygon 同步与验题 | API key、secret、题目 ID，以及所需权限；有 PIN 时另行配置 |
+
+具体命令与环境检查见[安装与配置指南](docs/getting-started.md)。本仓库的 API 示例从进程环境变量读取配置；不会自动加载 `.env`。
+
 ## Polygon API
 
 [Polygon API 调用说明](.agents/skills/acm-authoring/references/polygon-api.md)包含：
@@ -134,6 +172,7 @@ Skill 承载工作方式，执行工具落实检查条件。每个结论绑定�
     agents/openai.yaml
     references/review-report.md
 docs/
+  getting-started.md
   workflow-proposal.md
   research/polygon-testlib-research.md
 ```

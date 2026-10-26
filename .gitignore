@@ -1,0 +1,8 @@
+# 本地环境与配置
+.venv/
+.env
+.env.local
+
+# Python 临时文件
+__pycache__/
+*.pyc
